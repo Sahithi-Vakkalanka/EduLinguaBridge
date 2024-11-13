@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edu Lingua Bridge</title>
+    <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="logo">
+                <img src="logo.jpg" alt="Edu Lingua Bridge Logo">
+            </div>
+            <div class="description">
+                Is language a barrier to your education? <br>
+                You’re in the right place—explore and thrive in a multilingual learning environment...
+            </div>
+        </div>
+        <div class="right">
+            <div class="auth-form">
+                <h2>Start Your Journey</h2>
+                <p>Sign Up to create an account or log in if you already have one.</p>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <input type="text" id="signupUsername" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="signupPassword" placeholder="Password" required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit">Sign Up</button>
+                    </div>
+                </form>
+                <div class="login-link">
+                    <p>Already have an account? <a href="signin2.html">Sign In!</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+
+            // Retrieve existing users from local storage
+            const users = JSON.parse(localStorage.getItem('users')) || {};
+
+            if (users[username]) {
+                alert('Username already exists. Please choose another one.');
+            } else {
+                users[username] = password; // Store username and password
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('username', username);
+                window.location.href = 'welcome2.html';
+            }
+        });
+    </script>
+</body>
+</html>

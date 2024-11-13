@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio to French Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #04243d;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .container {
+            background-color: #5494b9e8;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .output-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 50px;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #04243d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0d71bd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Record Audio and Translate to French</h1>
+
+        <button id="start-record-btn">Start Recording</button>
+        <button id="stop-record-btn" disabled>Stop Recording</button>
+
+        <div class="output-box">
+            <h2>Transcription (English):</h2>
+            <p id="transcription"></p>
+        </div>
+
+        <div class="output-box">
+            <h2>Translation (French):</h2>
+            <p id="translation"></p>
+        </div>
+    </div>
+
+    <script>
+        // Check for SpeechRecognition API support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        // Set recognition to return interim results (you can change it if needed)
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+    
+        // HTML elements
+        const startRecordBtn = document.getElementById('start-record-btn');
+        const stopRecordBtn = document.getElementById('stop-record-btn');
+        const transcriptionOutput = document.getElementById('transcription');
+        const translationOutput = document.getElementById('translation');
+    
+        // Start recording button event
+        startRecordBtn.addEventListener('click', () => {
+            recognition.start();
+            startRecordBtn.disabled = true;
+            stopRecordBtn.disabled = false;
+        });
+    
+        // Stop recording button event
+        stopRecordBtn.addEventListener('click', () => {
+            recognition.stop();
+            startRecordBtn.disabled = false;
+            stopRecordBtn.disabled = true;
+        });
+    
+        // When recognition returns the result
+        recognition.addEventListener('result', (event) => {
+            const transcript = event.results[0][0].transcript.trim().toLowerCase(); // Trim whitespace and normalize case
+            transcriptionOutput.textContent = transcript;
+    
+            // French translations (for demonstration)
+            const frenchTranslations = {
+                "hello": "bonjour",
+                "world": "monde",
+                "goodbye": "au revoir",
+                "please": "s'il vous plaît",
+                "thank you": "merci",
+                "girl": "fille",
+                "boy": "garçon",
+                "yes": "oui",
+                "no": "non",
+                "hi": "salut",
+                "bye": "salut",
+                "good morning": "bonjour",
+                "good night": "bonne nuit",
+                "good evening": "bonsoir",
+                "very": "très",
+                "well": "bien",
+                "i am": "je suis",
+                "a lot": "beaucoup",
+                "tomorrow": "demain",
+                "today": "aujourd'hui",
+                "how": "comment",
+                "man": "homme",
+                "woman": "femme",
+                "cat": "chat",
+                "dog": "chien",
+                "horse": "cheval",
+                "see you soon": "à bientôt",
+                "like": "aime",
+                "traveling": "voyager",
+                "love": "adore",
+                "and": "et"
+            };
+    
+            // Translate each word in the transcription
+            const words = transcript.split(/\s+/); // Split by spaces
+            const translatedWords = words.map(word => frenchTranslations[word] || word); // Use original word if no translation available
+    
+            // Join translated words into a sentence
+            const translation = translatedWords.join(' ');
+            translationOutput.textContent = translation;
+        });
+    
+        // Handle recognition end
+        recognition.addEventListener('end', () => {
+            startRecordBtn.disabled = false;
+            stopRecordBtn.disabled = true;
+        });
+    </script>
+    
+</body>
+</html>

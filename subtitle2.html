@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduLinguaBridge - Real-Time Subtitles</title>
+    <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+    <div class="subtitle-container">
+        <h1>EduLinguaBridge - Real-Time Subtitles</h1>
+        <div id="subtitle">Subtitles will appear here...</div>
+    </div>
+
+    <script>
+        // Define a translation dictionary with multi-word phrases
+        const translationDictionary = {
+            "hello": "bonjour",
+            "world": "monde",
+            "goodbye": "au revoir",
+            "please": "s'il vous plaît",
+            "thank you": "merci",
+            "girl": "fille",
+            "boy": "garcon",
+            "yes": "oui",
+            "no": "non",
+            "enchante": "nice to meet you",
+            "hi": "salut",
+            "bye": "salut",
+            "good morning": "bonjour",
+            "good night": "bonne nuit",
+            "good evening": "bonsoir",
+            "very": "tres",
+            "well": "bien",
+            "i am": "je suis",
+            "a lot": "beaucoup",
+            "tomorrow": "demain",
+            "today": "aujourd'hui",
+            "how": "comment",
+            "man": "homme",
+            "woman": "femme",
+            "cat": "chat",
+            "dog": "chien",
+            "horse": "cheval",
+            "see you soon": "à bientôt",
+            "a": "un",
+            "like": "adore",
+            "travelling": "voyage",
+            "love": "adore",
+            "and": "et"
+        };
+
+        // Function to start real-time transcription and translation
+        function startTranscription() {
+            const subtitleElement = document.getElementById('subtitle');
+            
+            // Check if the browser supports the Web Speech API
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                subtitleElement.textContent = 'Sorry, your browser does not support speech recognition.';
+                return;
+            }
+
+            // Initialize speech recognition
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.interimResults = true;
+            recognition.lang = 'en-US'; // Set the language (adjust as needed)
+
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                console.log('Transcript:', transcript);
+                const translatedText = translateText(transcript);
+                subtitleElement.textContent = translatedText;
+            };
+
+            recognition.onerror = (event) => {
+                subtitleElement.textContent = 'Error occurred in speech recognition: ' + event.error;
+            };
+
+            recognition.onend = () => {
+                recognition.start(); // Restart recognition when it ends
+            };
+
+            recognition.start(); // Start speech recognition
+        }
+
+        // Function to translate text using the static dictionary
+        function translateText(text) {
+            // Convert text to lowercase to ensure case insensitivity
+            text = text.toLowerCase();
+
+            // Remove punctuation and handle special characters
+            text = text.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
+
+            // First, translate multi-word phrases
+            const phrases = Object.keys(translationDictionary).sort((a, b) => b.length - a.length);
+            phrases.forEach(phrase => {
+                const regex = new RegExp(`\\b${phrase}\\b`, 'gi'); // Word boundary matching
+                text = text.replace(regex, translationDictionary[phrase.toLowerCase()]);
+            });
+
+            return text;
+        }
+
+        // Start transcription when the page loads
+        window.onload = startTranscription;
+    </script>
+</body>
+</html>

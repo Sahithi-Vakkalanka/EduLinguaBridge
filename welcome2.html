@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - EduLinguaBridge</title>
+    <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+    <div class="welcome-container">
+        <img src="Dudu.gif" alt="EduLinguaBridge Logo">
+        <div class="welcome-message" id="welcomeMessage">
+            Welcome to EduLinguaBridge! <br>
+            I am Dudu , here to guide you. <br>
+            Ready to explore real-time translations?
+        </div>
+        <div class="button-group">
+            <button onclick="window.location.href='home2.html'">Let's go to Dashboard</button>
+        </div>
+    </div>
+    <script>
+        // Retrieve username from local storage
+        const username = localStorage.getItem('username');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+
+        // Display the username in the welcome message if it exists
+        if (username) {
+            welcomeMessage.innerHTML = `Welcome to Edu Lingua Bridge, ${username}! <br>I am Dudu, here to guide you.`;
+        }
+    </script>
+</body>
+</html>
